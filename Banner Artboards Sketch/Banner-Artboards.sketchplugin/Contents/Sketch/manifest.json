@@ -1,0 +1,25 @@
+{
+  "name": "Banner Artboards",
+  "description": "Artboard presets for common Banner Ad Sizes",
+  "author": "Jenny Beatty via Sebastian Helms",
+  "homepage": "https://github.com/graphikdeziner",
+  "version": 1.1,
+  "identifier": "com.github.graphikdeziner.banner-artboards-sketch",
+  "updateURL": "https://github.com/graphikdeziner/Banner-Ad-Artboards-Sketch",
+  "compatibleVersion": 3,
+  "bundleVersion": 1,
+  "commands": [
+    {
+      "name": "Install Banner Artboards",
+      "identifier": "show-info",
+      "shortcut": "ctrl alt i",
+      "script": "Banner-Artboards.coscript",
+      "handler": "installArtboards"
+    },
+  ],
+  "menu": {
+    "items": [
+      "show-info",
+    ]
+  }
+}

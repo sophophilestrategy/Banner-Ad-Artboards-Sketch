@@ -1,0 +1,70 @@
+/**
+ * Banner Artboards 1.0
+ *
+ * https://github.com/graphikdeziner/
+ */
+
+var pluginName = 'Banner Artboards'
+var fileManager = [NSFileManager defaultManager]
+var dataarray = [NSMutableArray alloc]
+
+function createNew(context, resourcePath, targetPath) {
+    var doc = context.document
+    var plistfile = [resourcePath stringByAppendingPathComponent:@"defaults.plist"]
+    dataarray = [[NSMutableArray alloc] initWithContentsOfFile: plistfile]
+    [dataarray writeToFile:targetPath atomically:"TRUE"]
+    [doc showMessage: pluginName + ': Success! Add a new Artboard (A) to access the banner artboard presets.']
+}
+
+function appendTo(context, resourcePath, targetPath) {
+    var doc = context.document
+    dataarray = [[NSMutableArray alloc] initWithContentsOfFile: targetPath]
+    var gotBanner = false
+    int i
+    for (i = 0; i < [dataarray count]; i++) {
+      var arrayElements = [dataarray objectAtIndex:i]
+      var name = [arrayElements objectForKey:@"name"]
+      if (name == 'Banner') {
+         gotBanner = true
+         break
+      } else {
+         gotBanner = false
+      }
+    }
+    if(!gotBanner) {
+      var plistfile = [resourcePath stringByAppendingPathComponent:@"defaults.plist"];
+      var newdataarray = [[NSMutableArray alloc] initWithContentsOfFile: plistfile]
+      var newArray = [dataarray mutableCopy]
+      [newArray  addObjectsFromArray:newdataarray]
+      [newArray writeToFile:targetPath atomically:"TRUE"]
+      [doc showMessage: pluginName + ': You did not have the banner artboard presets. They were installed successfully...']
+    } else {
+      [doc showMessage: pluginName + ': You already have the banner artboard presets. Press "A" to use any of them.']
+    }
+}
+
+function installArtboards(context) {
+  var path = context.scriptPath;
+  while(path.length() > 0) {
+    if ([fileManager fileExistsAtPath:path]) {
+      break;
+    }
+  }
+  path = [path stringByDeletingLastPathComponent]
+  var root = path
+  var pluginParentPath = path
+  pluginParentPath = [pluginParentPath stringByDeletingLastPathComponent]
+  pluginParentPath = [pluginParentPath stringByDeletingLastPathComponent]
+  pluginParentPath = [pluginParentPath stringByDeletingLastPathComponent]
+  pluginParentPath = [pluginParentPath stringByDeletingLastPathComponent]
+  pluginParentPath = [pluginParentPath stringByDeletingLastPathComponent]
+  var artboardsPlistPath = [pluginParentPath  stringByAppendingString:"/artboards.plist"]
+
+  if ([fileManager fileExistsAtPath:artboardsPlistPath]) {
+    appendTo(context, root, artboardsPlistPath)
+  } else {
+    createNew(context, root, artboardsPlistPath)
+  }
+
+}
+
